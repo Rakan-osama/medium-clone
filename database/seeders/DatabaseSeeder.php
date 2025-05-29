@@ -10,9 +10,6 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         User::factory()->create([
@@ -32,6 +29,6 @@ class DatabaseSeeder extends Seeder
             Category::create(['name' => $category]);
         }
 
-        Post::factory(100)->create();
+        Post ::factory(100)->create();
     }
 }
