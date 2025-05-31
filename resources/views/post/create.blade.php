@@ -26,11 +26,11 @@
                     <div class="mt-4">
                         <x-input-label for="category_id" :value="__('Category')" />
                         <select name="category_id" id="category_id"
-                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500
                                 rounded-md shadow-sm block mt-1 w-full">
                             <option value="">Select a Category</option>
-                            @foreach ($categories as $category )
-                                <option value="{{ $category->id }}">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -41,15 +41,15 @@
                     {{-- Content --}}
                     <div class="mt-4">
                         <x-input-label for="content" :value="__('Content')" />
-                        <x-input-textarea id="content" class="block mt-1 w-full" name="content"
-                            :value="old('content')" >
+                        <x-input-textarea id="content" class="block mt-1 w-full" name="content">
+                            {{ old('content') }}
                         </x-input-textarea>
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
 
                     {{-- Button --}}
                     <x-primary-button class="mt-4">
-                        submit  
+                        submit
                     </x-primary-button>
                 </form>
             </div>
