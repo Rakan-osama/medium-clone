@@ -6,18 +6,21 @@
                 <h1 class="text-2xl mb-4">{{ $post->title }}</h1>
                 {{-- User Avatar --}}
                 <div class="flex gap-4">
-                    <x-user-avatar :user="$post->user"/>
+                    <x-user-avatar :user="$post->user" />
                     {{-- User Avatar --}}
 
                     <div>
                         <x-follow-ctr :user="$post->user" class="flex gap-2">
-                            <a href="{{ route('profile.show' , $post->user) }}"
-                                class="hover:underline">
+                            <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">
                                 {{ $post->user->name }}
                             </a>
-                            <button href="#" :class="following ? 'text-red-500': 'text-emerald-600' "
-                                x-text="following ? 'Unfollow' : 'Follow' " @click="follow()" >  
-                            </button>
+                            
+                            @auth
+                                &middot;
+                                <button href="#" :class="following ? 'text-red-500' : 'text-emerald-600'"
+                                    x-text="following ? 'Unfollow' : 'Follow' " @click="follow()">
+                                </button>
+                            @endauth
                         </x-follow-ctr>
                         <div class="flex gap-2 text-gray-500 text-sm">
                             {{ $post->readTime() }} min read

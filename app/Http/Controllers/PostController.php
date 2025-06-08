@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -16,8 +18,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        
-        $posts = Post::latest()->simplePaginate(5);
+        DB::listen(function($query){
+            Log::info($query->sql);
+        });
+        $user = auth()->user();
+        $query = Post::latest();
+
+        if ($user) {
+            $ids = $user->following()->pluck('users.id');
+            $query->whereIn('user_id' ,$ids);
+        }
+        $posts = $query->simplePaginate(5);
         
 
         return view('post.index' , [
@@ -43,14 +54,17 @@ class PostController extends Controller
     {
         $data = $request->validated();
 
-        $image = $data['image'];
+        // $image = $data['image'];
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title']);   
 
-        $imagepath = $image->store('posts' , 'public');
-        $data['image'] = $imagepath;
+        // $imagepath = $image->store('posts' , 'public');
+        // $data['image'] = $imagepath;
 
-        Post::create($data);
+        $post = Post::create($data);
+
+        $post->addMediaFromRequest('image')
+            ->toMediaCollection();
 
         return redirect()->route('dashboard');
     }
