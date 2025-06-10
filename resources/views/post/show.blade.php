@@ -14,7 +14,7 @@
                             <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">
                                 {{ $post->user->name }}
                             </a>
-                            
+
                             @auth
                                 &middot;
                                 <button href="#" :class="following ? 'text-red-500' : 'text-emerald-600'"
@@ -29,6 +29,24 @@
                         </div>
                     </div>
                 </div>
+                {{-- User Avatar --}}
+
+                @if ($post->user_id === Auth::id())
+                    <div class="py-4 mt-8 border-t border-gray-200">
+                        <x-primary-button href="{{ route('post.edit' ,$post->slug) }}">
+                            Edit Post
+                        </x-primary-button>
+
+                        <form action="{{ route('post.destroy', $post) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('delete')
+                            <x-danger-button>
+                                Delete Post
+                            </x-danger-button>
+                        </form>
+
+                    </div>
+                @endif
 
                 {{-- Clap Section --}}
                 <x-clap-button :post="$post" />

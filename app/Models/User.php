@@ -97,7 +97,15 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function imageUrl()
     {
-        return $this->getFirstMedia('avatar')?->getUrl('avatar');
+        $media = $this->getFirstMedia('avatar');
+        if(!$media){
+            return null;
+        }
+
+        if ($media->hasGeneratedConversion('avatar')){
+            return $media?->getUrl('avatar');
+        }
+        return $media->getUrl();
     }
 
     public function isFollowedBy(?User $user)
@@ -106,7 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
             return false;
         }
         return $this->followers()->where('follower_id', $user->id)->exists();
-    }
+    }   
 
     public function hasClapped(Post $post)
     {
