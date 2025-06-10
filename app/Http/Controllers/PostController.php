@@ -135,7 +135,7 @@ class PostController extends Controller
             ->latest();
 
             if ($user) {
-                $ids = $user->following()->pluck('user.id');
+                $ids = $user->following()->pluck('users.id');
                 $query->whereIn('user_id' , $ids); 
             }
 
